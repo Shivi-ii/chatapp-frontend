@@ -18,7 +18,7 @@ import { VisuallyHiddenInput } from "../components/styles/StyledComponents";
 import { bgGradient } from "../constants/color";
 import { server } from "../constants/config";
 import { userExists } from "../redux/reducers/auth";
-import { usernameValidator } from "../utils/validators";
+import { usernameValidator, EmailValidation } from "../utils/validators";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -26,6 +26,7 @@ const Login = () => {
 
   const toggleLogin = () => setIsLogin((prev) => !prev);
 
+  const email = useInputValidation("", EmailValidation);
   const name = useInputValidation("");
   const bio = useInputValidation("");
   const username = useInputValidation("", usernameValidator);
@@ -78,6 +79,7 @@ const Login = () => {
 
     const formData = new FormData();
     formData.append("avatar", avatar.file);
+    formData.append("email", email.value)
     formData.append("name", name.value);
     formData.append("bio", bio.value);
     formData.append("username", username.value);
@@ -251,7 +253,22 @@ const Login = () => {
                 <TextField
                   required
                   fullWidth
-                  label="Name"
+                  label="email"
+                  margin="normal"
+                  variant="outlined"
+                  value={email.value}
+                  onChange={email.changeHandler}
+                />
+
+                {email.error && (
+                  <Typography color="error" variant="caption">
+                    {email.error}
+                  </Typography>
+                )}
+                <TextField
+                  required
+                  fullWidth
+                  label="name"
                   margin="normal"
                   variant="outlined"
                   value={name.value}
